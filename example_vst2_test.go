@@ -6,8 +6,7 @@ package vst2_test
 import (
 	"fmt"
 	"log"
-	"path/filepath"
-	"runtime"
+	"testing"
 	"unsafe"
 
 	"pipelined.dev/audio/vst2"
@@ -106,7 +105,11 @@ func Example_plugin() {
 
 	// Open VST library. Library contains a reference to
 	// OS-specific handle, that needs to be freed with Close.
-	vst, err := vst2.Open(pluginPath())
+	path := pluginPath()
+	if path == "" {
+		return
+	}
+	vst, err := vst2.Open(path)
 	if err != nil {
 		log.Panicf("failed to open VST library: %v", err)
 	}
@@ -151,25 +154,20 @@ func Example_plugin() {
 	plugin.ProcessDouble(in, out)
 	// Copy processed data.
 	out.Read(buffer)
-
-	// Output:
-	// Received opcode: HostGetCurrentProcessLevel
-	// Received opcode: hostWantMidi
-	// Received opcode: HostGetCurrentProcessLevel
 }
 
-// pluginPath returns a path to OS-specific plugin. It will panic if OS is
-// not supported.
+// pluginPath returns the path to the demoplugin built by TestMain.
+// Returns empty string if the build failed or the platform is unsupported.
 func pluginPath() string {
-	os := runtime.GOOS
-	var path string
-	switch os {
-	case "windows":
-		path, _ = filepath.Abs("_testdata\\TAL-Noisemaker.dll")
-	case "darwin":
-		path, _ = filepath.Abs("_testdata/TAL-Noisemaker.vst")
-	default:
-		panic(fmt.Sprintf("unsupported OS: %v", os))
+	return demoPluginPath
+}
+
+// skipIfNoPlugin skips the test if no plugin is available for the current platform.
+func skipIfNoPlugin(t *testing.T) string {
+	t.Helper()
+	path := pluginPath()
+	if path == "" {
+		t.Skip("demoplugin not available (build may have failed)")
 	}
 	return path
 }

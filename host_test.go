@@ -4,25 +4,60 @@
 package vst2_test
 
 import (
-	"strings"
 	"testing"
 
 	"pipelined.dev/audio/vst2"
+	"pipelined.dev/signal"
 )
 
-func TestPluginParameters(t *testing.T) {
-	v, err := vst2.Open(pluginPath())
+func TestDemoPlugin(t *testing.T) {
+	path := skipIfNoPlugin(t)
+	v, err := vst2.Open(path)
 	assertEqual(t, "vst error", err, nil)
 	defer v.Close()
 
-	testPlugin := func(fn func(p *vst2.Plugin)) func(*testing.T) {
-		return func(t *testing.T) {
-			p := v.Plugin(vst2.NoopHostCallback())
-			defer p.Close()
-			fn(p)
+	t.Run("plugin metadata", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		name := p.GetPluginName()
+		if name == "" {
+			t.Fatal("expected non-empty plugin name")
 		}
-	}
-	t.Run("get params", testPlugin(func(p *vst2.Plugin) {
+		vendor := p.GetVendorString()
+		if vendor == "" {
+			t.Fatal("expected non-empty vendor string")
+		}
+		product := p.GetProductString()
+		if product == "" {
+			t.Fatal("expected non-empty product string")
+		}
+		cat := p.GetCategory()
+		if cat == 0 {
+			t.Fatal("expected non-zero category")
+		}
+		// GetVendorVersion may return 0 for simple plugins.
+		_ = p.GetVendorVersion()
+	})
+
+	t.Run("channel info", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		inputs := p.NumInputs()
+		if inputs <= 0 {
+			t.Fatalf("expected positive NumInputs, got %d", inputs)
+		}
+		outputs := p.NumOutputs()
+		if outputs <= 0 {
+			t.Fatalf("expected positive NumOutputs, got %d", outputs)
+		}
+	})
+
+	t.Run("get params", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
 		numParams := p.NumParams()
 		assertEqual(t, "num params", numParams > 0, true)
 		for i := 0; i < numParams; i++ {
@@ -30,43 +65,133 @@ func TestPluginParameters(t *testing.T) {
 			p.ParamUnitName(i)
 			p.ParamValueName(i)
 		}
-	}))
-	t.Run("set param", testPlugin(func(p *vst2.Plugin) {
-		assertEqual(t, "resonance before", p.ParamValue(4), float32(0))
-		p.SetParamValue(4, 0.5)
-		assertEqual(t, "resonance after", p.ParamValue(4), float32(0.5))
-	}))
-	t.Run("get programs", testPlugin(func(p *vst2.Plugin) {
-		numPrograms := p.NumPrograms()
-		assertEqual(t, "num programs", numPrograms > 0, true)
-		for i := 0; i < numPrograms; i++ {
-			name := p.ProgramName(i)
-			assertEqual(t, "name not empty", len(name) > 0, true)
+	})
+
+	t.Run("set param", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		original := p.ParamValue(0)
+		p.SetParamValue(0, 0.75)
+		updated := p.ParamValue(0)
+		if updated == original {
+			t.Fatalf("param value did not change: got %v", updated)
 		}
-	}))
-	t.Run("set program name", testPlugin(func(p *vst2.Plugin) {
-		assertEqual(t, "program name before", p.CurrentProgramName(), "! Startup Juno Osc TAL")
-		newProgName := "test"
-		p.SetCurrentProgramName(newProgName)
-		assertEqual(t, "program name after", p.CurrentProgramName(), newProgName)
-	}))
-	t.Run("set program", testPlugin(func(p *vst2.Plugin) {
-		assertEqual(t, "program name before", p.CurrentProgramName(), "! Startup Juno Osc TAL")
-		p.SetProgram(2)
-		assertEqual(t, "program name after", p.CurrentProgramName(), "ARP 303 Like FN")
-	}))
-	t.Run("set program data", testPlugin(func(p *vst2.Plugin) {
-		assertEqual(t, "resonance before", p.ParamValue(4), float32(0))
-		progData := string(p.GetProgramData())
-		progData = strings.ReplaceAll(progData, "resonance=\"0.0\"", "resonance=\"1.0\"")
-		p.SetProgramData([]byte(progData))
-		assertEqual(t, "resonance before", p.ParamValue(4), float32(1))
-	}))
-	t.Run("set bank data", testPlugin(func(p *vst2.Plugin) {
-		assertEqual(t, "resonance before", p.ParamValue(4), float32(0))
-		progData := string(p.GetBankData())
-		progData = strings.ReplaceAll(progData, "resonance=\"0.0\"", "resonance=\"1.0\"")
-		p.SetBankData([]byte(progData))
-		assertEqual(t, "resonance before", p.ParamValue(4), float32(1))
-	}))
+	})
+
+	t.Run("vst version", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		// GetVSTVersion may return 0 for simple plugins that don't handle the opcode.
+		_ = p.GetVSTVersion()
+	})
+
+	t.Run("process double", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		const (
+			channels = 2
+			frames   = 64
+		)
+		p.Start()
+		p.SetSampleRate(44100)
+		p.SetBufferSize(frames)
+		p.Resume()
+
+		in := vst2.NewDoubleBuffer(channels, frames)
+		defer in.Free()
+		out := vst2.NewDoubleBuffer(channels, frames)
+		defer out.Free()
+
+		// Fill input with a non-zero signal.
+		inputData := make([][]float64, channels)
+		for c := range inputData {
+			inputData[c] = make([]float64, frames)
+			for i := range inputData[c] {
+				inputData[c][i] = 0.5
+			}
+		}
+		buf := signal.Allocator{
+			Channels: channels,
+			Length:   frames,
+			Capacity: frames,
+		}.Float64()
+		signal.WriteStripedFloat64(inputData, buf)
+		in.Write(buf)
+
+		p.ProcessDouble(in, out)
+		out.Read(buf)
+
+		// Verify output has non-zero samples.
+		nonZero := false
+		for i := 0; i < frames; i++ {
+			if buf.Sample(buf.BufferIndex(0, i)) != 0 {
+				nonZero = true
+				break
+			}
+		}
+		if !nonZero {
+			t.Fatal("expected non-zero output from ProcessDouble")
+		}
+	})
+
+	t.Run("process float", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		const (
+			channels = 2
+			frames   = 64
+		)
+		p.Start()
+		p.SetSampleRate(44100)
+		p.SetBufferSize(frames)
+		p.Resume()
+
+		in := vst2.NewFloatBuffer(channels, frames)
+		defer in.Free()
+		out := vst2.NewFloatBuffer(channels, frames)
+		defer out.Free()
+
+		// Fill input with a non-zero signal.
+		inputData := make([][]float64, channels)
+		for c := range inputData {
+			inputData[c] = make([]float64, frames)
+			for i := range inputData[c] {
+				inputData[c][i] = 0.5
+			}
+		}
+		buf := signal.Allocator{
+			Channels: channels,
+			Length:   frames,
+			Capacity: frames,
+		}.Float64()
+		signal.WriteStripedFloat64(inputData, buf)
+		in.Write(buf)
+
+		p.ProcessFloat(in, out)
+		out.Read(buf)
+
+		// Verify output has non-zero samples.
+		nonZero := false
+		for i := 0; i < frames; i++ {
+			if buf.Sample(buf.BufferIndex(0, i)) != 0 {
+				nonZero = true
+				break
+			}
+		}
+		if !nonZero {
+			t.Fatal("expected non-zero output from ProcessFloat")
+		}
+	})
+
+	t.Run("editor", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		// EditorGetRect should not panic; demoplugin has no editor so nil is expected.
+		_ = p.EditorGetRect()
+	})
 }

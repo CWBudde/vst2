@@ -1,0 +1,39 @@
+name: Plugin Build
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Operating system to build plugin on'
+        required: true
+        type: string
+      go-version:
+        description: 'Go version to use'
+        required: false
+        type: string
+        default: '1.x'
+
+jobs:
+  build:
+    name: Build plugin on ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Build plugin (c-archive)
+        run: go build --buildmode c-archive --tags plugin -o demoplugin.a ./demoplugin
+
+      - name: Verify plugin artifact
+        run: |
+          if [ ! -f demoplugin.a ]; then
+            echo "Error: demoplugin.a was not created"
+            exit 1
+          fi
+          echo "Plugin artifact created successfully"
+        shell: bash

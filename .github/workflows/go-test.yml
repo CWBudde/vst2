@@ -1,0 +1,43 @@
+name: Go Test
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Operating system to run tests on'
+        required: true
+        type: string
+      go-version:
+        description: 'Go version to use'
+        required: false
+        type: string
+        default: '1.x'
+      upload-coverage:
+        description: 'Whether to upload coverage to codecov'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  test:
+    name: Test on ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Run tests
+        run: go test --race --coverprofile=coverage.txt --covermode=atomic ./...
+
+      - name: Upload coverage to Codecov
+        if: inputs.upload-coverage
+        uses: codecov/codecov-action@v5
+        with:
+          file: ./coverage.txt
+          flags: ${{ inputs.os }}
+          fail_ci_if_error: false

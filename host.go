@@ -5,27 +5,27 @@ import "pipelined.dev/signal"
 type (
 	// Host handles all callbacks from plugin.
 	Host struct {
-		GetSampleRate        HostGetSampleRateFunc
-		GetBufferSize        HostGetBufferSizeFunc
-		GetProcessLevel      HostGetProcessLevelFunc
-		GetTimeInfo          HostGetTimeInfoFunc
-		UpdateDisplay        HostUpdateDisplayFunc
-		Automate             HostAutomateFunc
-		Idle                 HostIdleFunc
-		ProcessEvents        HostProcessEventsFunc
-		IOChanged            HostIOChangedFunc
-		SizeWindow           HostSizeWindowFunc
-		GetInputLatency      HostGetInputLatencyFunc
-		GetOutputLatency     HostGetOutputLatencyFunc
-		GetAutomationState   HostGetAutomationStateFunc
-		GetVendorString      HostGetVendorStringFunc
-		GetProductString     HostGetProductStringFunc
-		GetVendorVersion     HostGetVendorVersionFunc
-		CanDo                HostCanDoFunc
-		GetLanguage          HostGetLanguageFunc
-		GetDirectory         HostGetDirectoryFunc
-		BeginEdit            HostBeginEditFunc
-		EndEdit              HostEndEditFunc
+		GetSampleRate      HostGetSampleRateFunc
+		GetBufferSize      HostGetBufferSizeFunc
+		GetProcessLevel    HostGetProcessLevelFunc
+		GetTimeInfo        HostGetTimeInfoFunc
+		UpdateDisplay      HostUpdateDisplayFunc
+		Automate           HostAutomateFunc
+		Idle               HostIdleFunc
+		ProcessEvents      HostProcessEventsFunc
+		IOChanged          HostIOChangedFunc
+		SizeWindow         HostSizeWindowFunc
+		GetInputLatency    HostGetInputLatencyFunc
+		GetOutputLatency   HostGetOutputLatencyFunc
+		GetAutomationState HostGetAutomationStateFunc
+		GetVendorString    HostGetVendorStringFunc
+		GetProductString   HostGetProductStringFunc
+		GetVendorVersion   HostGetVendorVersionFunc
+		CanDo              HostCanDoFunc
+		GetLanguage        HostGetLanguageFunc
+		GetDirectory       HostGetDirectoryFunc
+		BeginEdit          HostBeginEditFunc
+		EndEdit            HostEndEditFunc
 	}
 
 	// HostGetSampleRateFunc returns host sample rate.

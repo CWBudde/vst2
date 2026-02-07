@@ -1,0 +1,31 @@
+name: Lint
+
+on:
+  workflow_call:
+    inputs:
+      go-version:
+        description: 'Go version to use'
+        required: false
+        type: string
+        default: '1.x'
+
+jobs:
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+          args: --config ./.golangci.toml --timeout 5m
+          # Only show new issues on pull requests
+          only-new-issues: ${{ github.event_name == 'pull_request' }}

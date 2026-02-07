@@ -24,6 +24,7 @@ Thumbs.db
 # Output of the go coverage tool
 *.out
 coverage.html
+coverage.txt
 
 # Build artifacts
 bin/
