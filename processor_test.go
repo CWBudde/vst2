@@ -36,7 +36,7 @@ func TestProcessor(t *testing.T) {
 			}
 		}
 
-		processor := v.Processor(vst2.NoopHostCallback(), progressFn)
+		processor := v.Processor(vst2.Host{}, progressFn)
 		
 		// Test with init function
 		initCalled := false
@@ -111,7 +111,7 @@ func TestProcessor(t *testing.T) {
 	})
 
 	t.Run("allocator without init", func(t *testing.T) {
-		processor := v.Processor(vst2.NoopHostCallback(), nil)
+		processor := v.Processor(vst2.Host{}, nil)
 		allocator := processor.Allocator(nil)
 
 		mctx := mutable.Context{}

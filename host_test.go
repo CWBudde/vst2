@@ -269,13 +269,13 @@ func TestDemoPlugin(t *testing.T) {
 
 		// Test GetProgramData/SetProgramData
 		data := p.GetProgramData()
-		if data != nil {
+		if len(data) > 0 {
 			p.SetProgramData(data)
 		}
 
 		// Test GetBankData/SetBankData
 		bankData := p.GetBankData()
-		if bankData != nil {
+		if len(bankData) > 0 {
 			p.SetBankData(bankData)
 		}
 	})
@@ -303,6 +303,76 @@ func TestDemoPlugin(t *testing.T) {
 		// Test GetOutputProperties
 		if numOutputs > 0 {
 			_, _ = p.GetOutputProperties(0)
+		}
+	})
+}
+
+func TestHostCallback(t *testing.T) {
+	path := skipIfNoPlugin(t)
+	v, err := vst2.Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer v.Close()
+
+	t.Run("host callbacks", func(t *testing.T) {
+		var sampleRate signal.Frequency = 48000
+		var bufferSize = 512
+
+		host := vst2.Host{
+			GetSampleRate: func() signal.Frequency {
+				return sampleRate
+			},
+			GetBufferSize: func() int {
+				return bufferSize
+			},
+			GetProcessLevel: func() vst2.ProcessLevel {
+				return vst2.ProcessLevelRealtime
+			},
+			UpdateDisplay: func() bool {
+				return true
+			},
+		}
+
+		p := v.Plugin(host.Callback())
+		defer p.Close()
+
+		// These calls will trigger the host callbacks
+		p.Start()
+		p.SetSampleRate(sampleRate)
+		p.SetBufferSize(bufferSize)
+		p.Resume()
+	})
+
+	t.Run("send events", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		// Create MIDI events
+		event1 := &vst2.MIDIEvent{
+			DeltaFrames: 0,
+			Data:        [3]byte{0x90, 0x3C, 0x40}, // Note On
+		}
+
+		event2 := &vst2.MIDIEvent{
+			DeltaFrames: 100,
+			Data:        [3]byte{0x80, 0x3C, 0x40}, // Note Off
+		}
+
+		events := vst2.Events(event1, event2)
+		defer events.Free()
+
+		// Send events to plugin
+		p.SendEvents(events)
+	})
+
+	t.Run("program name by index", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		numProgs := p.NumPrograms()
+		if numProgs > 0 {
+			_ = p.ProgramName(0)
 		}
 	})
 }

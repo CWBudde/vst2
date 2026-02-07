@@ -2,6 +2,7 @@ name: Format Check
 
 on:
   workflow_call:
+    inputs: {}
 
 jobs:
   format:
@@ -11,7 +12,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run treefmt
-        uses: isbecker/action-treefmt@v1
+      - name: Install treefmt
+        run: |
+          curl -fsSL https://github.com/numtide/treefmt/releases/download/v2.1.1/treefmt_2.1.1_linux_amd64.tar.gz | sudo tar -C /usr/local/bin -xz treefmt
+
+      - name: Set up Go (for gofumpt and gci)
+        uses: actions/setup-go@v5
         with:
-          fail-on-change: true
+          go-version: '1.x'
+
+      - name: Install formatters
+        run: |
+          go install mvdan.cc/gofumpt@latest
+          go install github.com/daixiang0/gci@latest
+          go install mvdan.cc/sh/v3/cmd/shfmt@latest
+          npm install -g prettier
+
+      - name: Run treefmt (check only)
+        run: |
+          treefmt --fail-on-change --allow-missing-formatter

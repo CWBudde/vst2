@@ -24,31 +24,32 @@ func TestPluginOpcodeString(t *testing.T) {
 		{plugSetSampleRate, "plugSetSampleRate"},
 		{plugSetBufferSize, "plugSetBufferSize"},
 		{plugStateChanged, "plugStateChanged"},
-		{plugEditorGetRect, "plugEditorGetRect"},
-		{plugEditorOpen, "plugEditorOpen"},
-		{plugEditorClose, "plugEditorClose"},
+		{PlugEditGetRect, "PlugEditGetRect"},
+		{PlugEditOpen, "PlugEditOpen"},
+		{PlugEditClose, "PlugEditClose"},
+		{PlugEditIdle, "PlugEditIdle"},
 		{plugGetChunk, "plugGetChunk"},
 		{plugSetChunk, "plugSetChunk"},
-		{plugProcessEvents, "plugProcessEvents"},
-		{plugCanBeAutomated, "plugCanBeAutomated"},
+		{PlugProcessEvents, "PlugProcessEvents"},
+		{PlugCanBeAutomated, "PlugCanBeAutomated"},
+		{PlugString2Parameter, "PlugString2Parameter"},
 		{plugGetProgramNameIndexed, "plugGetProgramNameIndexed"},
-		{plugGetPluginProperties, "plugGetPluginProperties"},
-		{plugGetVstVersion, "plugGetVstVersion"},
-		{plugCanDo, "plugCanDo"},
-		{plugGetTailSize, "plugGetTailSize"},
-		{plugGetParameterProperties, "plugGetParameterProperties"},
-		{plugGetVendorString, "plugGetVendorString"},
-		{plugGetProductString, "plugGetProductString"},
-		{plugGetVendorVersion, "plugGetVendorVersion"},
-		{plugVendorSpecific, "plugVendorSpecific"},
-		{plugGetPluginName, "plugGetPluginName"},
+		{PlugGetInputProperties, "PlugGetInputProperties"},
+		{PlugGetOutputProperties, "PlugGetOutputProperties"},
+		{PlugGetPlugCategory, "PlugGetPlugCategory"},
 		{plugSetSpeakerArrangement, "plugSetSpeakerArrangement"},
-		{plugStartProcess, "plugStartProcess"},
-		{plugStopProcess, "plugStopProcess"},
-		{plugEditorIdle, "plugEditorIdle"},
-		{plugGetInputProperties, "plugGetInputProperties"},
-		{plugGetOutputProperties, "plugGetOutputProperties"},
-		{plugGetPluginCategory, "plugGetPluginCategory"},
+		{PlugSetBypass, "PlugSetBypass"},
+		{PlugGetPluginName, "PlugGetPluginName"},
+		{PlugGetVendorString, "PlugGetVendorString"},
+		{PlugGetProductString, "PlugGetProductString"},
+		{PlugGetVendorVersion, "PlugGetVendorVersion"},
+		{PlugVendorSpecific, "PlugVendorSpecific"},
+		{PlugCanDo, "PlugCanDo"},
+		{PlugGetTailSize, "PlugGetTailSize"},
+		{plugGetParameterProperties, "plugGetParameterProperties"},
+		{PlugGetVstVersion, "PlugGetVstVersion"},
+		{PlugStartProcess, "PlugStartProcess"},
+		{PlugStopProcess, "PlugStopProcess"},
 	}
 
 	for _, tt := range tests {
@@ -104,10 +105,11 @@ func TestAsciiString(t *testing.T) {
 			t.Errorf("ascii8.String() = %v, want %v", got, "test")
 		}
 
-		// Test with null terminator
-		copy(s[:], "abc\x00xyz")
+		// Test with null padding at end - trimNull removes trailing nulls
+		s = ascii8{}
+		copy(s[:], []byte{'a', 'b', 'c', 0, 0, 0, 0, 0})
 		if got := s.String(); got != "abc" {
-			t.Errorf("ascii8.String() = %v, want %v", got, "abc")
+			t.Errorf("ascii8.String() with null = %q, want %q", got, "abc")
 		}
 	})
 

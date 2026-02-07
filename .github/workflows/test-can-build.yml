@@ -1,22 +1,20 @@
-name: Plugin Build
+name: Can Build
 
 on:
   workflow_call:
-    inputs:
-      os:
-        description: 'Operating system to build plugin on'
-        required: true
-        type: string
-      go-version:
-        description: 'Go version to use'
-        required: false
-        type: string
-        default: '1.x'
+    inputs: {}
 
 jobs:
   build:
-    name: Build plugin on ${{ inputs.os }}
-    runs-on: ${{ inputs.os }}
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - windows-latest
+          - ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,7 +22,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ inputs.go-version }}
+          go-version: '1.x'
 
       - name: Build plugin (c-archive)
         run: go build --buildmode c-archive --tags plugin -o demoplugin.a ./demoplugin
