@@ -57,6 +57,65 @@ func TestBuffer(t *testing.T) {
 	t.Run("stereo iterate", testBuffer([][]float64{{11, 12, 13}, {21, 22, 23}}, iterate))
 }
 
+func TestFloatBuffer(t *testing.T) {
+	type writeFn func(f signal.Floating, b FloatBuffer)
+	testBuffer := func(floats [][]float64, fn writeFn) func(*testing.T) {
+		return func(t *testing.T) {
+			channels := len(floats)
+			size := len(floats[0])
+			b := NewFloatBuffer(channels, size)
+			defer b.Free()
+
+			f := signal.Allocator{
+				Channels: channels,
+				Length:   size,
+				Capacity: size,
+			}.Float64()
+			signal.WriteStripedFloat64(floats, f)
+
+			fn(f, b)
+
+			for i := range floats {
+				for j := range floats[i] {
+					expected := float32(floats[i][j])
+					got := b.Channel(i)[j]
+					if got != expected {
+						t.Errorf("channel[%d][%d]: expected %v, got %v", i, j, expected, got)
+					}
+				}
+			}
+
+			for i := range floats {
+				var testBuf FloatBuffer
+				testBuf.data = append(testBuf.data, getFloatChannel(b.cArray(), i))
+				testBuf.Frames = len(floats[i])
+				cChannel := testBuf.Channel(0)
+				for j := range floats[i] {
+					expected := float32(floats[i][j])
+					got := cChannel[j]
+					if got != expected {
+						t.Errorf("c channel[%d][%d]: expected %v, got %v", i, j, expected, got)
+					}
+				}
+			}
+		}
+	}
+	write := func(f signal.Floating, b FloatBuffer) {
+		b.Write(f)
+	}
+	t.Run("mono write", testBuffer([][]float64{{1, 2, 3}}, write))
+	t.Run("stereo write", testBuffer([][]float64{{11, 12, 13}, {21, 22, 23}}, write))
+	iterate := func(f signal.Floating, b FloatBuffer) {
+		for c := 0; c < f.Channels(); c++ {
+			for i := 0; i < b.Frames; i++ {
+				b.Channel(c)[i] = float32(f.Sample(f.BufferIndex(c, i)))
+			}
+		}
+	}
+	t.Run("mono iterate", testBuffer([][]float64{{1, 2, 3}}, iterate))
+	t.Run("stereo iterate", testBuffer([][]float64{{11, 12, 13}, {21, 22, 23}}, iterate))
+}
+
 func assertEqual(t *testing.T, name string, result, expected interface{}) {
 	t.Helper()
 	if !reflect.DeepEqual(expected, result) {

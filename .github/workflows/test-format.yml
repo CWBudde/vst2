@@ -1,0 +1,17 @@
+name: Format Check
+
+on:
+  workflow_call:
+
+jobs:
+  format:
+    name: Check Code Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run treefmt
+        uses: isbecker/action-treefmt@v1
+        with:
+          fail-on-change: true

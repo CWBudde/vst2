@@ -1,4 +1,4 @@
-name: Go Test
+name: Unit Tests
 
 on:
   workflow_call:
@@ -38,6 +38,6 @@ jobs:
         if: inputs.upload-coverage
         uses: codecov/codecov-action@v5
         with:
-          file: ./coverage.txt
+          files: ./coverage.txt
           flags: ${{ inputs.os }}
           fail_ci_if_error: false

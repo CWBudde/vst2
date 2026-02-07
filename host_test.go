@@ -193,5 +193,116 @@ func TestDemoPlugin(t *testing.T) {
 
 		// EditorGetRect should not panic; demoplugin has no editor so nil is expected.
 		_ = p.EditorGetRect()
+
+		// EditorOpen, EditorClose, EditorIdle should not panic even with no editor
+		p.EditorOpen(nil)
+		p.EditorClose()
+		p.EditorIdle()
+	})
+
+	t.Run("advanced operations", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		// Test UniqueID
+		_ = p.UniqueID()
+
+		// Test InitialDelay
+		_ = p.InitialDelay()
+
+		// Test Flags
+		_ = p.Flags()
+
+		// Test CanProcessFloat32/Float64
+		_ = p.CanProcessFloat32()
+		_ = p.CanProcessFloat64()
+
+		// Test Suspend
+		p.Suspend()
+
+		// Test CanDo
+		_ = p.CanDo("sendVstEvents")
+		_ = p.CanDo("receiveVstEvents")
+
+		// Test GetTailSize
+		_ = p.GetTailSize()
+	})
+
+	t.Run("programs", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		// Test NumPrograms
+		numProgs := p.NumPrograms()
+		if numProgs < 0 {
+			t.Fatalf("expected non-negative NumPrograms, got %d", numProgs)
+		}
+
+		// Test Program/SetProgram
+		_ = p.Program()
+		p.SetProgram(0)
+
+		// Test CurrentProgramName/SetCurrentProgramName
+		_ = p.CurrentProgramName()
+		p.SetCurrentProgramName("Test Program")
+
+		// Test ProgramName (if plugin has programs)
+		if numProgs > 0 {
+			_ = p.ProgramName(0)
+		}
+	})
+
+	t.Run("param properties", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		numParams := p.NumParams()
+		if numParams > 0 {
+			// Test ParamProperties
+			_, _ = p.ParamProperties(0)
+		}
+	})
+
+	t.Run("chunk data", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		// Test GetProgramData/SetProgramData
+		data := p.GetProgramData()
+		if data != nil {
+			p.SetProgramData(data)
+		}
+
+		// Test GetBankData/SetBankData
+		bankData := p.GetBankData()
+		if bankData != nil {
+			p.SetBankData(bankData)
+		}
+	})
+
+	t.Run("speaker arrangement", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		// SetSpeakerArrangement should not panic
+		p.SetSpeakerArrangement(nil, nil)
+	})
+
+	t.Run("channel properties", func(t *testing.T) {
+		p := v.Plugin(vst2.NoopHostCallback())
+		defer p.Close()
+
+		numInputs := p.NumInputs()
+		numOutputs := p.NumOutputs()
+
+		// Test GetInputProperties
+		if numInputs > 0 {
+			_, _ = p.GetInputProperties(0)
+		}
+
+		// Test GetOutputProperties
+		if numOutputs > 0 {
+			_, _ = p.GetOutputProperties(0)
+		}
 	})
 }
