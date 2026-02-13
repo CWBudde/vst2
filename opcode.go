@@ -3,11 +3,10 @@
 package vst2
 
 const (
-	maxVendorStrLen  = 64 // used for #plugGetVendorString, #audioMasterGetVendorString
-	maxProductStrLen = 64 // used for #plugGetProductString, #audioMasterGetProductString
-	maxPluginNameLen = 32 // used for #plugGetPluginName
-
-	maxFileNameLen = 100 // used for #VstAudioFile->name
+	_ = 64  // maxVendorStrLen: used for #plugGetVendorString, #audioMasterGetVendorString
+	_ = 64  // maxProductStrLen: used for #plugGetProductString, #audioMasterGetProductString
+	_ = 32  // maxPluginNameLen: used for #plugGetPluginName
+	_ = 100 // maxFileNameLen: used for #VstAudioFile->name
 )
 
 type (

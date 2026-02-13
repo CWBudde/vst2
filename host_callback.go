@@ -246,7 +246,7 @@ func (p *Plugin) ParamValue(index int) float32 {
 
 // SetParamValue sets new value for parameter.
 func (p *Plugin) SetParamValue(index int, value float32) {
-	C.setParameterHostBridge((*C.CPlugin)(p.p), C.int32_t(index), C.float(value))
+	C.setParameterHostBridge(p.p, C.int32_t(index), C.float(value))
 }
 
 // CanProcessFloat32 checks if plugin can process float32.
@@ -391,7 +391,7 @@ func (p *Plugin) GetBankData() []byte {
 // including chunk header.
 func (p *Plugin) SetBankData(data []byte) {
 	ptr := C.CBytes(data)
-	p.Dispatch(plugSetChunk, 0, int64(len(data)), unsafe.Pointer(ptr), 0)
+	p.Dispatch(plugSetChunk, 0, int64(len(data)), ptr, 0)
 	C.free(ptr)
 }
 

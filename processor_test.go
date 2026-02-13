@@ -28,6 +28,7 @@ func TestProcessor(t *testing.T) {
 	)
 
 	t.Run("allocator", func(t *testing.T) {
+		t.Parallel()
 		progressCalled := false
 		progressFn := func(frames int) {
 			progressCalled = true
@@ -111,6 +112,7 @@ func TestProcessor(t *testing.T) {
 	})
 
 	t.Run("allocator without init", func(t *testing.T) {
+		t.Parallel()
 		processor := v.Processor(vst2.Host{}, nil)
 		allocator := processor.Allocator(nil)
 

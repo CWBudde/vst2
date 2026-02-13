@@ -44,13 +44,3 @@ func assertNotNil(t *testing.T, name string, result interface{}) {
 		t.Fatalf("%v\nresult: \t%T\t%+v \nexpected: \t%T\t%+v", name, result, result, nil, nil)
 	}
 }
-
-func assertPanic(t *testing.T, fn func()) {
-	t.Helper()
-	defer func() {
-		if r := recover(); r == nil {
-			t.Fatalf("expected panic")
-		}
-	}()
-	fn()
-}

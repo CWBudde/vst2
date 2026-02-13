@@ -17,6 +17,7 @@ func TestDemoPlugin(t *testing.T) {
 	defer v.Close()
 
 	t.Run("plugin metadata", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -41,6 +42,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("channel info", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -55,6 +57,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("get params", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -68,6 +71,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("set param", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -80,6 +84,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("vst version", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -88,6 +93,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("process double", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -138,6 +144,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("process float", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -188,6 +195,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("editor", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -201,6 +209,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("advanced operations", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -229,6 +238,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("programs", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -253,6 +263,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("param properties", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -264,6 +275,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("chunk data", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -281,6 +293,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("speaker arrangement", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -289,6 +302,7 @@ func TestDemoPlugin(t *testing.T) {
 	})
 
 	t.Run("channel properties", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -316,6 +330,7 @@ func TestHostCallback(t *testing.T) {
 	defer v.Close()
 
 	t.Run("host callbacks", func(t *testing.T) {
+		t.Parallel()
 		var sampleRate signal.Frequency = 48000
 		bufferSize := 512
 
@@ -345,6 +360,7 @@ func TestHostCallback(t *testing.T) {
 	})
 
 	t.Run("send events", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 
@@ -367,6 +383,7 @@ func TestHostCallback(t *testing.T) {
 	})
 
 	t.Run("program name by index", func(t *testing.T) {
+		t.Parallel()
 		p := v.Plugin(vst2.NoopHostCallback())
 		defer p.Close()
 

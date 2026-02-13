@@ -19,7 +19,6 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic("failed to create temp dir: " + err.Error())
 	}
-	defer os.RemoveAll(dir)
 
 	switch runtime.GOOS {
 	case "linux":
@@ -29,7 +28,10 @@ func TestMain(m *testing.M) {
 	case "darwin":
 		demoPluginPath = buildDarwinBundle(dir)
 	}
-	os.Exit(m.Run())
+
+	code := m.Run()
+	os.RemoveAll(dir)
+	os.Exit(code)
 }
 
 // buildDemoPlugin compiles the demoplugin as c-shared and returns the output path.

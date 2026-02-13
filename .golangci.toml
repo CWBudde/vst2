@@ -25,6 +25,7 @@ enable = [
     "gocyclo",       # Cyclomatic complexity
     "goconst",       # Detect repeated strings
     "gocritic",      # Opinionated linter
+    "paralleltest",  # Detect missing t.Parallel() calls
 ]
 
 [linters.settings.tagliatelle.case.rules]
