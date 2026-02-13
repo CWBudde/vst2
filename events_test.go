@@ -9,6 +9,7 @@ import (
 )
 
 func TestEvents(t *testing.T) {
+	t.Parallel()
 	dump := vst2.SysExData([]byte("this is a test"))
 	defer dump.Free()
 	events := vst2.Events(

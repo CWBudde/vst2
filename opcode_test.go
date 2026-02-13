@@ -8,6 +8,7 @@ import (
 )
 
 func TestPluginOpcodeString(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		opcode PluginOpcode
 		want   string
@@ -53,7 +54,9 @@ func TestPluginOpcodeString(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt // capture range variable
 		t.Run(tt.want, func(t *testing.T) {
+			t.Parallel()
 			if got := tt.opcode.String(); got != tt.want {
 				t.Errorf("PluginOpcode(%d).String() = %v, want %v", tt.opcode, got, tt.want)
 			}
@@ -62,6 +65,7 @@ func TestPluginOpcodeString(t *testing.T) {
 }
 
 func TestHostOpcodeString(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		opcode HostOpcode
 		want   string
@@ -89,7 +93,9 @@ func TestHostOpcodeString(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt // capture range variable
 		t.Run(tt.want, func(t *testing.T) {
+			t.Parallel()
 			if got := tt.opcode.String(); got != tt.want {
 				t.Errorf("HostOpcode(%d).String() = %v, want %v", tt.opcode, got, tt.want)
 			}
@@ -98,7 +104,9 @@ func TestHostOpcodeString(t *testing.T) {
 }
 
 func TestAsciiString(t *testing.T) {
+	t.Parallel()
 	t.Run("ascii8", func(t *testing.T) {
+		t.Parallel()
 		var s ascii8
 		copy(s[:], "test")
 		if got := s.String(); got != "test" {
@@ -114,6 +122,7 @@ func TestAsciiString(t *testing.T) {
 	})
 
 	t.Run("ascii24", func(t *testing.T) {
+		t.Parallel()
 		var s ascii24
 		copy(s[:], "test string")
 		if got := s.String(); got != "test string" {
@@ -122,6 +131,7 @@ func TestAsciiString(t *testing.T) {
 	})
 
 	t.Run("ascii32", func(t *testing.T) {
+		t.Parallel()
 		var s ascii32
 		copy(s[:], "another test")
 		if got := s.String(); got != "another test" {
@@ -130,6 +140,7 @@ func TestAsciiString(t *testing.T) {
 	})
 
 	t.Run("ascii64", func(t *testing.T) {
+		t.Parallel()
 		var s ascii64
 		copy(s[:], "long test string")
 		if got := s.String(); got != "long test string" {

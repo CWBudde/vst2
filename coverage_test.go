@@ -11,6 +11,8 @@ import (
 )
 
 // TestAdditionalCoverage tests various uncovered code paths
+//
+//nolint:paralleltest // Shares plugin instance across subtests
 func TestAdditionalCoverage(t *testing.T) {
 	path := skipIfNoPlugin(t)
 	v, err := vst2.Open(path)
@@ -133,6 +135,7 @@ func TestAdditionalCoverage(t *testing.T) {
 	})
 }
 
+//nolint:paralleltest // Shares plugin instance across subtests
 func TestErrorConditions(t *testing.T) {
 	path := skipIfNoPlugin(t)
 	v, err := vst2.Open(path)

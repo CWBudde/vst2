@@ -8,9 +8,11 @@ import (
 )
 
 func TestBuffer(t *testing.T) {
+	t.Parallel()
 	type writeFn func(f signal.Floating, b DoubleBuffer)
 	testBuffer := func(floats [][]float64, fn writeFn) func(*testing.T) {
 		return func(t *testing.T) {
+			t.Parallel()
 			channels := len(floats)
 			size := len(floats[0])
 			b := NewDoubleBuffer(channels, size)
@@ -44,7 +46,9 @@ func TestBuffer(t *testing.T) {
 	write := func(f signal.Floating, b DoubleBuffer) {
 		b.Write(f)
 	}
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("mono write", testBuffer([][]float64{{1, 2, 3}}, write))
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("stereo write", testBuffer([][]float64{{11, 12, 13}, {21, 22, 23}}, write))
 	iterate := func(f signal.Floating, b DoubleBuffer) {
 		for c := 0; c < f.Channels(); c++ {
@@ -53,14 +57,18 @@ func TestBuffer(t *testing.T) {
 			}
 		}
 	}
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("mono iterate", testBuffer([][]float64{{1, 2, 3}}, iterate))
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("stereo iterate", testBuffer([][]float64{{11, 12, 13}, {21, 22, 23}}, iterate))
 }
 
 func TestFloatBuffer(t *testing.T) {
+	t.Parallel()
 	type writeFn func(f signal.Floating, b FloatBuffer)
 	testBuffer := func(floats [][]float64, fn writeFn) func(*testing.T) {
 		return func(t *testing.T) {
+			t.Parallel()
 			channels := len(floats)
 			size := len(floats[0])
 			b := NewFloatBuffer(channels, size)
@@ -103,7 +111,9 @@ func TestFloatBuffer(t *testing.T) {
 	write := func(f signal.Floating, b FloatBuffer) {
 		b.Write(f)
 	}
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("mono write", testBuffer([][]float64{{1, 2, 3}}, write))
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("stereo write", testBuffer([][]float64{{11, 12, 13}, {21, 22, 23}}, write))
 	iterate := func(f signal.Floating, b FloatBuffer) {
 		for c := 0; c < f.Channels(); c++ {
@@ -112,7 +122,9 @@ func TestFloatBuffer(t *testing.T) {
 			}
 		}
 	}
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("mono iterate", testBuffer([][]float64{{1, 2, 3}}, iterate))
+	//nolint:paralleltest // testBuffer helper already calls t.Parallel()
 	t.Run("stereo iterate", testBuffer([][]float64{{11, 12, 13}, {21, 22, 23}}, iterate))
 }
 
