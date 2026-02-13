@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"pipelined.dev/audio/vst2"
+	"cwbudde/audio/vst2"
 )
 
 func TestEvents(t *testing.T) {

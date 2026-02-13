@@ -7,7 +7,8 @@ import (
 	"context"
 	"testing"
 
-	"pipelined.dev/audio/vst2"
+	"cwbudde/audio/vst2"
+
 	"pipelined.dev/pipe"
 	"pipelined.dev/pipe/mutable"
 	"pipelined.dev/signal"
@@ -37,7 +38,7 @@ func TestProcessor(t *testing.T) {
 		}
 
 		processor := v.Processor(vst2.Host{}, progressFn)
-		
+
 		// Test with init function
 		initCalled := false
 		initFn := func(p *vst2.Plugin) {
@@ -46,7 +47,7 @@ func TestProcessor(t *testing.T) {
 		}
 
 		allocator := processor.Allocator(initFn)
-		
+
 		mctx := mutable.Context{}
 		props := pipe.SignalProperties{
 			Channels:   channels,

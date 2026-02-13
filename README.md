@@ -1,7 +1,7 @@
 ## `vst2`
 
-[![PkgGoDev](https://pkg.go.dev/badge/pipelined.dev/audio/vst2)](https://pkg.go.dev/pipelined.dev/audio/vst2)
-[![Go Report Card](https://goreportcard.com/badge/pipelined.dev/audio/vst2)](https://goreportcard.com/report/pipelined.dev/audio/vst2)
+[![PkgGoDev](https://pkg.go.dev/badge/cwbudde/audio/vst2)](https://pkg.go.dev/cwbudde/audio/vst2)
+[![Go Report Card](https://goreportcard.com/badge/cwbudde/audio/vst2)](https://goreportcard.com/report/cwbudde/audio/vst2)
 [![Test](https://github.com/pipelined/vst2/workflows/Test/badge.svg)](https://github.com/pipelined/vst2/actions?query=workflow%3ATest)
 [![codecov](https://codecov.io/gh/pipelined/vst2/branch/master/graph/badge.svg)](https://codecov.io/gh/pipelined/vst2)
 
@@ -10,7 +10,7 @@
 ## Installation
 
 ```bash
-$ go get -u pipelined.dev/audio/vst2
+$ go get -u cwbudde/audio/vst2
 ```
 
 ## Quick Start

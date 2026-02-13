@@ -6,7 +6,8 @@ package vst2_test
 import (
 	"testing"
 
-	"pipelined.dev/audio/vst2"
+	"cwbudde/audio/vst2"
+
 	"pipelined.dev/signal"
 )
 

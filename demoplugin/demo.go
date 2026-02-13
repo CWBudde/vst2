@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"math"
 
-	"pipelined.dev/audio/vst2"
+	"cwbudde/audio/vst2"
 )
 
 func init() {
