@@ -6,8 +6,7 @@ package vst2_test
 import (
 	"testing"
 
-	"cwbudde/audio/vst2"
-
+	"github.com/cwbudde/vst2"
 	"pipelined.dev/signal"
 )
 
@@ -132,7 +131,6 @@ func TestAdditionalCoverage(t *testing.T) {
 
 		_ = timeInfoCalled
 	})
-
 }
 
 func TestErrorConditions(t *testing.T) {

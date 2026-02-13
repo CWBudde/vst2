@@ -6,8 +6,7 @@ package vst2_test
 import (
 	"testing"
 
-	"cwbudde/audio/vst2"
-
+	"github.com/cwbudde/vst2"
 	"pipelined.dev/signal"
 )
 
@@ -318,7 +317,7 @@ func TestHostCallback(t *testing.T) {
 
 	t.Run("host callbacks", func(t *testing.T) {
 		var sampleRate signal.Frequency = 48000
-		var bufferSize = 512
+		bufferSize := 512
 
 		host := vst2.Host{
 			GetSampleRate: func() signal.Frequency {

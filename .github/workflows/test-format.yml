@@ -19,7 +19,7 @@ jobs:
       - name: Set up Go (for gofumpt and gci)
         uses: actions/setup-go@v5
         with:
-          go-version: '1.x'
+          go-version: "1.x"
 
       - name: Install formatters
         run: |

@@ -9,8 +9,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"cwbudde/audio/vst2"
-
+	"github.com/cwbudde/vst2"
 	"pipelined.dev/signal"
 )
 

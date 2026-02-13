@@ -7,8 +7,7 @@ import (
 	"context"
 	"testing"
 
-	"cwbudde/audio/vst2"
-
+	"github.com/cwbudde/vst2"
 	"pipelined.dev/pipe"
 	"pipelined.dev/pipe/mutable"
 	"pipelined.dev/signal"

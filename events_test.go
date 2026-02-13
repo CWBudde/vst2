@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"cwbudde/audio/vst2"
+	"github.com/cwbudde/vst2"
 )
 
 func TestEvents(t *testing.T) {

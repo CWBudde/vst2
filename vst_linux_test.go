@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"testing"
 
-	"cwbudde/audio/vst2"
+	"github.com/cwbudde/vst2"
 )
 
 func TestLinux(t *testing.T) {
