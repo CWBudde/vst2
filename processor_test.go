@@ -126,11 +126,11 @@ func TestProcessor(t *testing.T) {
 		}
 
 		// Verify properties
-		if p.SignalProperties.Channels != channels {
-			t.Errorf("expected %d channels, got %d", channels, p.SignalProperties.Channels)
+		if p.Channels != channels {
+			t.Errorf("expected %d channels, got %d", channels, p.Channels)
 		}
-		if p.SignalProperties.SampleRate != sampleRate {
-			t.Errorf("expected sample rate %v, got %v", sampleRate, p.SignalProperties.SampleRate)
+		if p.SampleRate != sampleRate {
+			t.Errorf("expected sample rate %v, got %v", sampleRate, p.SampleRate)
 		}
 	})
 }

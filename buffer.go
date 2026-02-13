@@ -63,7 +63,7 @@ func (b DoubleBuffer) Write(s signal.Floating) int {
 	for c := 0; c < s.Channels(); c++ {
 		row := (*[1 << 30]C.double)(unsafe.Pointer(b.data[c]))
 		for i := 0; i < frames; i++ {
-			(*row)[i] = C.double(s.Sample(s.BufferIndex(c, i)))
+			row[i] = C.double(s.Sample(s.BufferIndex(c, i)))
 		}
 	}
 	return frames
@@ -127,7 +127,7 @@ func (b FloatBuffer) Write(s signal.Floating) int {
 	for c := 0; c < s.Channels(); c++ {
 		row := (*[1 << 30]C.float)(unsafe.Pointer(b.data[c]))
 		for i := 0; i < frames; i++ {
-			(*row)[i] = C.float(s.Sample(s.BufferIndex(c, i)))
+			row[i] = C.float(s.Sample(s.BufferIndex(c, i)))
 		}
 	}
 	return frames

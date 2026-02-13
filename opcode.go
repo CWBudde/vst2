@@ -76,7 +76,7 @@ const (
 	// Ptr: *[maxParamStrLen]byte buffer for parameter label.
 	plugGetParamName
 
-	// deprecated in VST v2.4
+	// Deprecated: plugGetVu was deprecated in VST v2.4
 	plugGetVu
 
 	// PlugSetSampleRate passed to set new sample rate.
@@ -98,21 +98,21 @@ const (
 	// PlugEditClose passed to close editor window.
 	PlugEditClose
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugEditDraw
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugEditMouse
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugEditKey
 
 	// PlugEditIdle passed to notify plugin that host goes idle.
 	PlugEditIdle
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugEditTop
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugEditSleep
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugIdentify
 
 	// PlugGetChunk passed to get chunk data.
@@ -139,7 +139,7 @@ const (
 	// Return: true for success.
 	PlugString2Parameter
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugGetNumProgramCategories
 
 	// PlugGetProgramNameIndexed passed to get program name by index.
@@ -148,11 +148,11 @@ const (
 	// Return: true for success.
 	plugGetProgramNameIndexed
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugCopyProgram
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugConnectInput
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugConnectOutput
 
 	// PlugGetInputProperties passed to check if certain input configuration is supported.
@@ -169,9 +169,9 @@ const (
 	// Return: VstPlugCategory value.
 	PlugGetPlugCategory
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugGetCurrentPosition
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugGetDestinationBuffer
 
 	// PlugOfflineNotify passed to notify about offline file processing.
@@ -196,7 +196,7 @@ const (
 	// Ptr: output *SpeakerArrangement.
 	plugSetSpeakerArrangement
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugSetBlockSizeAndSampleRate
 
 	// PlugSetBypass passed to make plugin bypassed.
@@ -206,7 +206,7 @@ const (
 	// Ptr: *[maxPluginNameLen]byte buffer for plugin name.
 	PlugGetPluginName
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugGetErrorText
 
 	// PlugGetVendorString passed to get vendor string.
@@ -230,11 +230,11 @@ const (
 	// Return: tail size (p.g. reverb time). 0 is default, 1 means no tail.
 	PlugGetTailSize
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugIdle
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugGetIcon
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugSetViewPosition
 
 	// PlugGetParameterProperties passed to get parameter's properties.
@@ -243,7 +243,7 @@ const (
 	// Return: 1 if supported
 	plugGetParameterProperties
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	plugKeysRequired
 
 	// PlugGetVstVersion passed to get VST version of plugin.
@@ -356,10 +356,10 @@ const (
 	// HostIdle passed to indicate that plugin does some modal action.
 	HostIdle
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostPinConnected
 	_
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostWantMidi
 
 	// HostGetTime passed when plugin needs time info.
@@ -371,20 +371,20 @@ const (
 	// Return: 1 if supported and processed.
 	HostProcessEvents
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostSetTime
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostTempoAt
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostGetNumAutomatableParameters
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostGetParameterQuantization
 
 	// HostIOChanged passed when plugin's IO setup has changed.
 	// Return: 1 if supported.
 	HostIOChanged
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostNeedIdle
 
 	// HostSizeWindow passed when host needs to resize plugin window.
@@ -404,11 +404,11 @@ const (
 	// Return: output latency in samples.
 	HostGetOutputLatency
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostGetPreviousPlug
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostGetNextPlug
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostWillReplaceOrAccumulate
 
 	// HostGetCurrentProcessLevel passed to get current process level.
@@ -440,9 +440,9 @@ const (
 	// HostOfflineGetCurrentMetaPass is unknown.
 	HostOfflineGetCurrentMetaPass
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostSetOutputSampleRate
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostGetOutputSpeakerArrangement
 
 	// HostGetVendorString is sent to get host vendor string.
@@ -457,7 +457,7 @@ const (
 	// HostVendorSpecific is sent vendor-specific handling.
 	HostVendorSpecific
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostSetIcon
 
 	// HostCanDo passed to check capabilities of host.
@@ -468,9 +468,9 @@ const (
 	// Return: HostLanguage value.
 	HostGetLanguage
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostOpenWindow
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostCloseWindow
 
 	// HostGetDirectory passed to get the current directory.
@@ -494,11 +494,11 @@ const (
 	// Ptr: *FileSelect.
 	HostCloseFileSelector
 
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostEditFile
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostGetChunkFile
-	// deprecated in VST v2.4
+	// Deprecated: deprecated in VST v2.4
 	hostGetInputSpeakerArrangement
 )
 

@@ -149,5 +149,5 @@ func (s SysExDataPtr) Bytes() []byte {
 
 // Free releases allocated memory.
 func (s SysExDataPtr) Free() {
-	C.free(unsafe.Pointer(unsafe.Pointer(s.data)))
+	C.free(unsafe.Pointer(s.data))
 }
